@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const indexSchema = new mongoose.Schema({
+const globalSchema = new mongoose.Schema({
   title: {
     type: String,
     require: true,
@@ -11,6 +11,6 @@ const indexSchema = new mongoose.Schema({
   },
 });
 
-const indexModel = mongoose.model("Index", indexSchema);
+const globalModel = mongoose.model("global", globalSchema);
 
-module.exports = indexModel;
+module.exports = globalModel;

@@ -30,7 +30,7 @@ const authController = {
         id: user.id,
       },
       process.env.JWT_ACCESS_KEY,
-      { expiresIn: "30s" }
+      { expiresIn: "1d" }
     );
   },
 
@@ -42,7 +42,7 @@ const authController = {
         id: user.id,
       },
       process.env.JWT_REFRESH_KEY,
-      { expiresIn: "30d" }
+      { expiresIn: "1m" }
     );
   },
 
@@ -51,30 +51,44 @@ const authController = {
     try {
       const user = await User.findOne({ username: req.body.username });
       if (!user) {
-        res.status(404).json("Wrong username !");
-        return;
+        return res.status(404).json("Wrong username !");
       }
       const validPassword = await bcrypt.compare(
         req.body.password,
         user.password
       );
       if (!validPassword) {
-        res.status(404).json("wrong password !");
+        return res.status(404).json("wrong password !");
       }
       if (user && validPassword) {
         const accessToken = authController.generateAccessToken(user);
         const refreshToken = authController.generateRefreshToken(user);
+
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
           sameSite: "strict",
-          secure: process.env.SECURE,
         });
+
         const { password, ...others } = user._doc;
         res.status(200).json({ others, accessToken });
       }
     } catch (err) {
       res.status(500).json("err", err);
     }
+  },
+
+  requestRefreshToken: (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      res.status(401).json("You're not authenticated !");
+    }
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
+      if (err) console.log(err);
+
+      //create new access token, refresh token
+      const newAccessToken = authController.generateAccessToken(user);
+      res.status(200).json({ accessToken: newAccessToken });
+    });
   },
 };
 

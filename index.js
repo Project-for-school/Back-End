@@ -42,6 +42,6 @@ app.use(express.json());
 //route
 app.use("/v1/auth", authRoute);
 app.use("/v1/index", globalRoute);
-app.use("/v1/user", middlewareCheckIdentity.checkIdentity, userRoute);
-app.use("/v1/product", middlewareCheckIdentity.checkIdentity, productRoute);
-app.use("/v1/premium", middlewareCheckIdentity.checkIdentity, premiumRoute);
+app.use("/v1/user", userRoute);
+app.use("/v1/product", productRoute);
+app.use("/v1/premium", premiumRoute);

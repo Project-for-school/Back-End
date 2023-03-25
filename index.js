@@ -4,13 +4,15 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
-//api
+//route
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 const premiumRoute = require("./routes/premium");
+const globalRoute = require("./routes/global");
+const productRoute = require("./routes/product");
 
 //middleware
-const middlewareController = require("./middleware/middleware.controller");
+const middlewareCheckIdentity = require("./middleware/middleware.controller");
 
 dotenv.config();
 
@@ -39,5 +41,7 @@ app.use(express.json());
 
 //route
 app.use("/v1/auth", authRoute);
-app.use("/v1/user", middlewareController.checkDentity, userRoute);
-app.use("/v1/premium", premiumRoute);
+app.use("/v1/index", globalRoute);
+app.use("/v1/user", middlewareCheckIdentity.checkIdentity, userRoute);
+app.use("/v1/product", middlewareCheckIdentity.checkIdentity, productRoute);
+app.use("/v1/premium", middlewareCheckIdentity.checkIdentity, premiumRoute);

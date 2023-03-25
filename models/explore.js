@@ -6,17 +6,14 @@ const courseSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    chapters: {
-      type: Number,
-      require: true,
-      default: 1,
-    },
-    item: {
-      type: Number,
-      require: true,
-      default: 1,
-    },
+    item: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
+  { timestamps: true },
   { collection: "Course" }
 );
 
@@ -32,6 +29,7 @@ const exploreSchema = new mongoose.Schema(
       },
     ],
   },
+  { timestamps: true },
   { collection: "Explore" }
 );
 

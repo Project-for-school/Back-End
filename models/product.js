@@ -8,7 +8,6 @@ const productSchema = new mongoose.Schema(
     },
     solution: {
       type: Boolean,
-      require: true,
       default: false,
     },
     difficult: {
@@ -17,8 +16,19 @@ const productSchema = new mongoose.Schema(
     },
     status: {
       type: Boolean,
-      require: true,
       default: false,
+    },
+    likeCount: {
+      type: Number,
+      default: 0,
+    },
+    content: {
+      type: String,
+      require: true,
+    },
+    course: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
     },
   },
   { timestamps: true },

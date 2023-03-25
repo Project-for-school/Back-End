@@ -4,8 +4,13 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
+//api
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
+const premiumRoute = require("./routes/premium");
+
+//middleware
+const middlewareController = require("./middleware/middleware.controller");
 
 dotenv.config();
 
@@ -19,7 +24,7 @@ mongoose
   })
   .then(() => {
     console.log("Connected to DB");
-    app.listen(port, () => {
+    app.listen(process.env.PORT, () => {
       console.log(`Example app listening on port ${port}`);
     });
   })
@@ -34,4 +39,5 @@ app.use(express.json());
 
 //route
 app.use("/v1/auth", authRoute);
-app.use("/v1/user", userRoute);
+app.use("/v1/user", middlewareController.checkDentity, userRoute);
+app.use("/v1/premium", premiumRoute);

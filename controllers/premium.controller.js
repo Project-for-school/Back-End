@@ -1,9 +1,9 @@
-const Premium = require("../models/premium");
+const { premiumModel } = require("../models/");
 
 const premiumController = {
   getPosts: async (req, res) => {
     try {
-      const dataPremium = await Premium.find();
+      const dataPremium = await premiumModel.find();
       res.status(200).json(dataPremium);
     } catch (err) {
       res.status(500).json(err);
@@ -12,7 +12,7 @@ const premiumController = {
 
   getPost: async (req, res) => {
     try {
-      const premium = await Premium.findById(req.params.id);
+      const premium = await premiumModel.findById(req.params.id);
       res.status(200).json(premium);
     } catch (err) {
       res.status(500).json(err);
@@ -21,7 +21,7 @@ const premiumController = {
 
   postPremium: async (req, res) => {
     try {
-      const newPostPremium = new Premium({
+      const newPostPremium = new premiumModel({
         package: req.body.package,
         title: req.body.title,
         price: req.body.price,
@@ -36,7 +36,9 @@ const premiumController = {
 
   deletePost: async (req, res) => {
     try {
-      const findPost = await Premium.findByIdAndDelete({ _id: req.params.id });
+      const findPost = await premiumModel.findByIdAndDelete({
+        _id: req.params.id,
+      });
       if (findPost) {
         res.status(200).json("Remove Success !");
       } else {
@@ -55,7 +57,7 @@ const premiumController = {
         price: req.body.price,
         description: req.body.description,
       };
-      const findPost = await Premium.findByIdAndUpdate(
+      const findPost = await premiumModel.findByIdAndUpdate(
         { _id: req.params.id },
         newData
       );

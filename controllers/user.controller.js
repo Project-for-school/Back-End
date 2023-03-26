@@ -1,10 +1,11 @@
-const User = require("../models/user");
 const bcrypt = require("bcrypt");
+
+const { userModel } = require("../models/");
 
 const userController = {
   getUser: async (req, res) => {
     try {
-      const user = await User.findById(req.params.id);
+      const user = await userModel.findById(req.params.id);
       res.status(200).json(user);
     } catch (err) {
       res.status(500).json("err", err);
@@ -13,7 +14,7 @@ const userController = {
 
   getAllUsers: async (req, res) => {
     try {
-      const users = await User.find();
+      const users = await userModel.find();
       res.status(200).json(users);
     } catch (err) {
       res.status(500).json("err", err);
@@ -22,7 +23,7 @@ const userController = {
 
   changePassword: async (req, res) => {
     try {
-      const user = await User.findById(req.params.id);
+      const user = await userModel.findById(req.params.id);
       if (user) {
         const salt = await bcrypt.genSalt(10);
         const hashed = await bcrypt.hash(req.body.newpassword, salt);
@@ -38,7 +39,7 @@ const userController = {
 
   deleteUser: async (req, res) => {
     try {
-      const findUser = await User.findOneAndDelete({ _id: req.params.id });
+      const findUser = await userModel.findOneAndDelete({ _id: req.params.id });
       if (findUser) {
         res.status(200).json("Remove Success !");
       } else {

@@ -18,10 +18,10 @@
     "git": "^0.1.5",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.1.0",
-    "mongoose": "^7.0.2",
-    "morgan": "^1.10.0"
+    "mongoose": "^7.0.2"
   },
   "devDependencies": {
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.22"
   }
 }

@@ -1,15 +1,15 @@
 const router = require("express").Router();
 
-const controller = require("../controllers/premium.controller");
+const { premiumController } = require("../controllers");
 
-router.get("/", controller.getPosts);
+router.get("/", premiumController.getPosts);
 
-router.get("/:id", controller.getPost);
+router.get("/:id", premiumController.getPost);
 
-router.post("/post", controller.postPremium);
+router.post("/post", premiumController.postPremium);
 
-router.put("/:id", controller.repairPost);
+router.put("/repair/:id", premiumController.repairPost);
 
-router.delete("/:id", controller.deletePost);
+router.delete("/delete/:id", premiumController.deletePost);
 
 module.exports = router;

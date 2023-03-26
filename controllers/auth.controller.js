@@ -1,6 +1,7 @@
-const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const { userModel } = require("../models/");
 
 const authController = {
   //register
@@ -8,13 +9,11 @@ const authController = {
     try {
       const salt = await bcrypt.genSalt(10);
       const hashed = await bcrypt.hash(req.body.password, salt);
-
-      const newUser = new User({
+      const newUser = new userModel({
         username: req.body.username,
         email: req.body.email,
         password: hashed,
       });
-
       const user = await newUser.save();
       res.status(200).json(user);
     } catch (err) {
@@ -49,7 +48,7 @@ const authController = {
   //login
   login: async (req, res) => {
     try {
-      const user = await User.findOne({ username: req.body.username });
+      const user = await userModel.findOne({ username: req.body.username });
       if (!user) {
         return res.status(404).json("Wrong username !");
       }
@@ -89,6 +88,15 @@ const authController = {
       const newAccessToken = authController.generateAccessToken(user);
       res.status(200).json({ accessToken: newAccessToken });
     });
+  },
+
+  logOut: async (req, res) => {
+    try {
+      res.clearCookie("refreshToken");
+      res.status(200).json("Logged Out !");
+    } catch (err) {
+      res.status(500).json("err", err);
+    }
   },
 };
 

@@ -1,15 +1,15 @@
 const router = require("express").Router();
 
-const controller = require("../controllers/global.controller");
+const { globalController } = require("../controllers");
 
-router.get("/", controller.getAllData);
+router.get("/", globalController.getAllData);
 
-router.get("/:id", controller.getData);
+router.get("/:id", globalController.getData);
 
-router.post("/post", controller.postData);
+router.post("/post", globalController.postData);
 
-router.put("/:id", controller.repairData);
+router.put("/repair/:id", globalController.repairData);
 
-router.delete("/:id", controller.deleteData);
+router.delete("/delete/:id", globalController.deleteData);
 
 module.exports = router;

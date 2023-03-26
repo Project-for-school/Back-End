@@ -4,16 +4,21 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const morgan = require("morgan");
 
-//route
-const authRoute = require("./routes/auth");
-const userRoute = require("./routes/user");
-const premiumRoute = require("./routes/premium");
-const globalRoute = require("./routes/global");
-const productRoute = require("./routes/product");
+const {
+  assignmentRoute,
+  globalRoute,
+  authRoute,
+  premiumRoute,
+  userRoute,
+  topicRoute,
+  infoRoute,
+  subjectRoute
+} = require("./routes");
 
 //middleware
-const middlewareCheckIdentity = require("./middleware/middleware.controller");
+const middleware = require("./middleware/");
 
 dotenv.config();
 
@@ -22,9 +27,10 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(cookieParser());
+app.use(morgan("common"));
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: "30mb" }));
-app.use(express.json());
 
 mongoose
   .connect(process.env.URI, {
@@ -42,8 +48,11 @@ mongoose
   });
 
 //route
+app.use("/v1/subject", subjectRoute);
 app.use("/v1/auth", authRoute);
-app.use("/v1/index", globalRoute);
-app.use("/v1/user", middlewareCheckIdentity.checkIdentity, userRoute);
-app.use("/v1/product", productRoute);
+app.use("/v1/info", infoRoute);
+app.use("/v1/topic", topicRoute);
+app.use("/v1/home", globalRoute);
 app.use("/v1/premium", premiumRoute);
+app.use("/v1/assignment", assignmentRoute);
+app.use("/v1/user", middleware.checkIdentity, userRoute);

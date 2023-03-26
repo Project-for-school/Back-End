@@ -1,14 +1,10 @@
 const mongoose = require("mongoose");
 
-const productSchema = new mongoose.Schema(
+const assignmentsSchema = new mongoose.Schema(
   {
     title: {
       type: String,
       require: true,
-    },
-    solution: {
-      type: Boolean,
-      default: false,
     },
     difficult: {
       type: String,
@@ -26,15 +22,15 @@ const productSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    course: {
+    subject: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
+      ref: "Subject",
     },
   },
   { timestamps: true },
-  { collection: "Product" }
+  { collection: "Assignments" }
 );
 
-const productModel = mongoose.model("Product", productSchema);
+const assignmentsModel = mongoose.model("Assignments", assignmentsSchema);
 
-module.exports = productModel;
+module.exports = assignmentsModel;

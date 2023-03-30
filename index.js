@@ -14,7 +14,7 @@ const {
   userRoute,
   topicRoute,
   infoRoute,
-  subjectRoute
+  subjectRoute,
 } = require("./routes");
 
 //middleware
@@ -49,10 +49,17 @@ mongoose
 
 //route
 app.use("/v1/subject", subjectRoute);
+
 app.use("/v1/auth", authRoute);
+
 app.use("/v1/info", infoRoute);
+
 app.use("/v1/topic", topicRoute);
+
 app.use("/v1/home", globalRoute);
+
 app.use("/v1/premium", premiumRoute);
+
 app.use("/v1/assignment", assignmentRoute);
+
 app.use("/v1/user", middleware.checkIdentity, userRoute);

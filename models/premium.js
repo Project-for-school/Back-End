@@ -6,10 +6,6 @@ const premiumSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    title: {
-      type: String,
-      require: true,
-    },
     oldPrice: {
       type: String,
       default: null,

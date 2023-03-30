@@ -21,12 +21,7 @@ const premiumController = {
 
   postPremium: async (req, res) => {
     try {
-      const newPostPremium = new premiumModel({
-        package: req.body.package,
-        title: req.body.title,
-        price: req.body.price,
-        description: req.body.description,
-      });
+      const newPostPremium = new premiumModel(req.body);
       const premium = await newPostPremium.save();
       res.status(200).json(premium);
     } catch (err) {

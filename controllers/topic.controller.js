@@ -21,14 +21,9 @@ const topicController = {
   },
   postTopic: async (req, res) => {
     try {
-      const findTopic = await topicModel.findoOne({ topic: req.body.topic });
-      if (findTopic) {
-        res.status(403).json("Topic already exist");
-      } else {
-        const savedTopic = new topicModel(req.body);
-        const topic = await savedTopic.save();
-        res.status(200).json(topic);
-      }
+      const savedTopic = new topicModel(req.body);
+      const topic = await savedTopic.save();
+      res.status(200).json(topic);
     } catch (err) {
       res.status(500).json("err: ", err);
     }

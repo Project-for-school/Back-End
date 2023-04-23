@@ -15,6 +15,7 @@ const {
   topicRoute,
   infoRoute,
   subjectRoute,
+  questionRoute,
 } = require("./routes");
 
 //middleware
@@ -61,5 +62,7 @@ app.use("/v1/home", globalRoute);
 app.use("/v1/premium", premiumRoute);
 
 app.use("/v1/assignment", assignmentRoute);
+
+app.use("/v1/question", questionRoute);
 
 app.use("/v1/user", middleware.checkIdentity, userRoute);

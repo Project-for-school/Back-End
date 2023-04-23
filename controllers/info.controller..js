@@ -13,11 +13,7 @@ const infoController = {
   getPost: async (req, res) => {
     try {
       const findPost = infoModel.findById(req.params.id);
-      if (findPost) {
-        res.status(200).json(findPost);
-      } else {
-        res.status(500).json("Invalid Id");
-      }
+      res.status(200).json(findPost);
     } catch (err) {
       res.status(500).json("err: ", err);
     }
@@ -35,15 +31,8 @@ const infoController = {
 
   repairPost: async (req, res) => {
     try {
-      const findPost = infoModel.findByIdAndUpdate(
-        { _id: req.params.id },
-        req.body
-      );
-      if (findPost) {
-        res.status(200).json(findPost);
-      } else {
-        res.status(500).json("Invalid Id");
-      }
+      await infoModel.findByIdAndUpdate({ _id: req.params.id }, req.body);
+      res.status(200).json("Repair Success !");
     } catch (err) {
       res.status(500).json("err: ", err);
     }
@@ -51,12 +40,8 @@ const infoController = {
 
   deletePost: async (req, res) => {
     try {
-      const findPost = infoModel.findByIdAndDelete({ _id: req.params.id });
-      if (findPost) {
-        res.status(200).json("Delete Success");
-      } else {
-        res.status(404).json("Invalid Id");
-      }
+      await infoModel.findByIdAndDelete({ _id: req.params.id });
+      res.status(200).json("Delete Success");
     } catch (err) {
       res.status(500).json("err: ", err);
     }

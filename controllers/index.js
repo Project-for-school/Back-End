@@ -6,6 +6,7 @@ const topicController = require("./topic.controller");
 const userController = require("./user.controller");
 const infoController = require("./info.controller.");
 const subjectController = require("./subject.controller");
+const questionsController = require("./questions.controller");
 
 module.exports = {
   premiumController,
@@ -16,4 +17,5 @@ module.exports = {
   userController,
   infoController,
   subjectController,
+  questionsController,
 };

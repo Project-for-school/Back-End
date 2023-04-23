@@ -5,6 +5,7 @@ const premiumModel = require("./premium");
 const topicModel = require("./topic");
 const subjectModel = require("./subject");
 const userModel = require("./user");
+const questionModel = require("./question");
 
 module.exports = {
   assignmentModel,
@@ -14,4 +15,5 @@ module.exports = {
   topicModel,
   subjectModel,
   userModel,
+  questionModel,
 };

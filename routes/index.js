@@ -6,6 +6,7 @@ const userRoute = require("./user");
 const topicRoute = require("./topic");
 const subjectRoute = require("./subject");
 const assignmentRoute = require("./assignment");
+const questionRoute = require("./questions");
 
 module.exports = {
   assignmentRoute,
@@ -16,4 +17,5 @@ module.exports = {
   topicRoute,
   infoRoute,
   subjectRoute,
+  questionRoute,
 };

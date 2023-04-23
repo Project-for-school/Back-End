@@ -31,14 +31,10 @@ const premiumController = {
 
   deletePost: async (req, res) => {
     try {
-      const findPost = await premiumModel.findByIdAndDelete({
+      await premiumModel.findByIdAndDelete({
         _id: req.params.id,
       });
-      if (findPost) {
-        res.status(200).json("Remove Success !");
-      } else {
-        res.status(404).json("Invalid ID !");
-      }
+      res.status(200).json("Remove Success !");
     } catch (err) {
       res.status(500).json(err);
     }
@@ -46,21 +42,8 @@ const premiumController = {
 
   repairPost: async (req, res) => {
     try {
-      const newData = {
-        package: req.body.package,
-        title: req.body.title,
-        price: req.body.price,
-        description: req.body.description,
-      };
-      const findPost = await premiumModel.findByIdAndUpdate(
-        { _id: req.params.id },
-        newData
-      );
-      if (findPost) {
-        res.status(200).json("Repair Success !");
-      } else {
-        res.status(404).json("Invalid ID !");
-      }
+      await premiumModel.findByIdAndUpdate({ _id: req.params.id }, req.body);
+      res.status(200).json("Repair Success !");
     } catch (err) {
       res.status(500).json(err);
     }

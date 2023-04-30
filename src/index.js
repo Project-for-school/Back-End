@@ -20,7 +20,7 @@ const {
 //connectDatabase
 const connectDatabase = require("./config/connectDB");
 //middleware
-const middleware = require("./middleware/");
+const handleErrors = require("./middleware/handleErrors");
 
 const app = express();
 const port = process.env.PORT || 8888;
@@ -46,20 +46,13 @@ app.listen(process.env.PORT, async () => {
 });
 
 //route
-app.use("/v1/subject", subjectRoute);
-
-app.use("/v1/auth", authRoute);
-
-app.use("/v1/info", infoRoute);
-
-app.use("/v1/topic", topicRoute);
-
-app.use("/v1/home", globalRoute);
-
-app.use("/v1/premium", premiumRoute);
-
-app.use("/v1/assignment", assignmentRoute);
-
-app.use("/v1/question", questionRoute);
-
-app.use("/v1/user", userRoute);
+app.use("/api/v1/subject", subjectRoute);
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/info", infoRoute);
+app.use("/api/v1/topic", topicRoute);
+app.use("/api/v1/home", globalRoute);
+app.use("/api/v1/premium", premiumRoute);
+app.use("/api/v1/assignment", assignmentRoute);
+app.use("/api/v1/question", questionRoute);
+app.use("/api/v1/user", userRoute);
+app.use(handleErrors.notFound);

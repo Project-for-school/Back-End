@@ -1,77 +1,33 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const joi = require("joi");
 
-const userService = require("../services/user.service");
+const handleErrors = require("../middleware/handleErrors");
+const userService = require("../services/auth.service");
+const { username, password, email } = require("../helpers/joi.schema");
+
 const authController = {
   //register
   register: async (req, res) => {
     try {
-      const salt = await bcrypt.genSalt(10);
-      const hashed = await bcrypt.hash(req.body.password, salt);
-      const user = {
-        username: req.body.username,
-        email: req.body.email,
-        password: hashed,
-      };
-      let messsage = await userService.createNewUser(user);
-      res.status(200).json(messsage);
+      const { error } = joi
+        .object({ username, password, email })
+        .validate(req.body);
+      if (error) return handleErrors.badRequest(error.details[0]?.message, res);
+      const message = await userService.register(req.body);
+      res.status(200).json(message);
     } catch (err) {
-      res.status(500).json("err", err);
+      return handleErrors.interalServerErrors(res);
     }
-  },
-
-  //Generate access token
-  generateAccessToken: (user) => {
-    return jwt.sign(
-      {
-        admin: user.admin,
-        id: user.id,
-      },
-      process.env.JWT_ACCESS_KEY,
-      { expiresIn: "1d" }
-    );
-  },
-
-  //Generate refresh token
-  generateRefreshToken: (user) => {
-    return jwt.sign(
-      {
-        admin: user.admin,
-        id: user.id,
-      },
-      process.env.JWT_REFRESH_KEY,
-      { expiresIn: "1m" }
-    );
   },
 
   //login
   login: async (req, res) => {
     try {
-      const user = await userModel.findOne({ username: req.body.username });
-      if (!user) {
-        return res.status(404).json("Wrong username !");
-      }
-      const validPassword = await bcrypt.compare(
-        req.body.password,
-        user.password
-      );
-      if (!validPassword) {
-        return res.status(404).json("wrong password !");
-      }
-      if (user && validPassword) {
-        const accessToken = authController.generateAccessToken(user);
-        const refreshToken = authController.generateRefreshToken(user);
-
-        res.cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          sameSite: "strict",
-        });
-
-        const { password, ...others } = user._doc;
-        res.status(200).json({ others, accessToken });
-      }
+      const { error } = joi.object({ username, password }).validate(req.body);
+      if (error) return handleErrors.badRequest(error.details[0]?.message, res);
+      const message = await userService.login(req.body);
+      res.status(200).json(message);
     } catch (err) {
-      res.status(500).json("err", err);
+      return handleErrors.interalServerErrors(res);
     }
   },
 

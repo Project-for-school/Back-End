@@ -1,50 +1,58 @@
 const bcrypt = require("bcrypt");
+const joi = require("joi");
+
+const handleErrors = require("../middleware/handleErrors");
+const userService = require("../services/user.service");
+const { password } = require("../helpers/joi.schema");
 
 const userController = {
+  getUserCurrent: async (req, res) => {
+    try {
+      const { id } = req.user;
+      const message = await userService.getCurrentUserOrById(id);
+      res.status(200).json(message);
+    } catch (err) {
+      return handleErrors.interalServerErrors(res);
+    }
+  },
+
   getUser: async (req, res) => {
     try {
-      const user = await userModel.findById(req.params.id);
-      res.status(200).json(user);
+      const message = await userService.getCurrentUserOrById(req.params.id);
+      res.status(200).json(message);
     } catch (err) {
-      res.status(500).json("err", err);
+      return handleErrors.interalServerErrors(res);
     }
   },
 
   getAllUsers: async (req, res) => {
     try {
-      const users = await userModel.find();
-      res.status(200).json(users);
+      const message = await userService.getAllUsers();
+      res.status(200).json(message);
     } catch (err) {
-      res.status(500).json("err", err);
+      return handleErrors.interalServerErrors(res);
     }
   },
 
   changePassword: async (req, res) => {
     try {
-      const user = await userModel.findById(req.params.id);
-      if (user) {
-        const salt = await bcrypt.genSalt(10);
-        const hashed = await bcrypt.hash(req.body.newpassword, salt);
-        await user.updateOne({ password: hashed });
-        res.status(200).json("Success");
-      } else {
-        res.status(404).json("Invalid ID");
-      }
+      const { error } = joi.object({ password }).validate(req.body);
+      if (error) return handleErrors.badRequest(error.details[0]?.message, res);
+      const newPassword = req.body.password;
+      const userId = req.params.id;
+      const message = await userService.repairPassword(newPassword, userId);
+      res.status(200).json(message);
     } catch (err) {
-      res.status(500).json("err", err);
+      return handleErrors.interalServerErrors(res);
     }
   },
 
   deleteUser: async (req, res) => {
     try {
-      const findUser = await userModel.findOneAndDelete({ _id: req.params.id });
-      if (findUser) {
-        res.status(200).json("Remove Success !");
-      } else {
-        res.status(404).json("Invalid ID !");
-      }
+      const message = await userService.deleteUser(req.params.id);
+      res.status(200).json(message);
     } catch (err) {
-      res.status(500).json("err", err);
+      return handleErrors.interalServerErrors(res);
     }
   },
 };
